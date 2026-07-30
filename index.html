@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GET RIPPED OR DIE TRYING | Detroit Fitness Apparel</title>
+  <meta name="description" content="Get Ripped Or Die Trying. Fitness apparel built in Detroit for people who take the work seriously. Cut-off hoodies, oversized tees, and shorts made to train in." />
+  <link rel="icon" type="image/png" href="assets/grodt-logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+  <!-- Announcement bar -->
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker-track">
+      <span>First 50 Customers: $100 Per Set</span><span class="dot">&#9670;</span>
+      <span>Sleeved or Sleeveless T-Shirt</span><span class="dot">&#9670;</span>
+      <span>Built in Detroit</span><span class="dot">&#9670;</span>
+      <span>No Days Off</span><span class="dot">&#9670;</span>
+      <span>First 50 Customers: $100 Per Set</span><span class="dot">&#9670;</span>
+      <span>Sleeved or Sleeveless T-Shirt</span><span class="dot">&#9670;</span>
+      <span>Built in Detroit</span><span class="dot">&#9670;</span>
+      <span>No Days Off</span><span class="dot">&#9670;</span>
+    </div>
+  </div>
+
+  <!-- Navigation -->
+  <header class="nav" id="nav">
+    <a class="nav-logo" href="#top" aria-label="Get Ripped Or Die Trying home">
+      <img src="assets/grodt-logo.png" alt="Get Ripped Or Die Trying logo" />
+    </a>
+    <nav class="nav-links" id="navLinks">
+      <a href="#special">The First 50</a>
+      <a href="#shop">Shop</a>
+      <a href="#lookbook">Lookbook</a>
+      <a href="#story">Our Story</a>
+    </nav>
+    <div class="nav-actions">
+      <a href="#shop" class="btn btn-small">Shop Now</a>
+      <button class="cart-btn" id="cartBtn" aria-label="Cart">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        <span class="cart-count" id="cartCount">0</span>
+      </button>
+      <button class="menu-btn" id="menuBtn" aria-label="Menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <main id="top">
+
+    <!-- Hero -->
+    <section class="hero">
+      <div class="hero-media">
+        <img src="assets/hero-action.png" alt="The GRODT crew training outside a red brick building in Detroit, lifting dumbbells and doing pushups" fetchpriority="high" />
+      </div>
+      <div class="hero-overlay"></div>
+      <div class="hero-content">
+        <p class="hero-kicker reveal">Detroit, Michigan</p>
+        <h1 class="reveal">Get Ripped<br /><span>Or Die Trying</span></h1>
+        <p class="hero-sub reveal">Apparel for people who take the work seriously. Heavyweight fabric, clean cuts, and a standard that never drops.</p>
+        <div class="hero-cta reveal">
+          <a href="#shop" class="btn btn-red">Shop The Drop</a>
+          <a href="#special" class="btn btn-ghost">First 50 Deal</a>
+        </div>
+      </div>
+      <div class="hero-scroll" aria-hidden="true"><span></span></div>
+    </section>
+
+    <!-- Special offer -->
+    <section class="special" id="special">
+      <div class="container special-grid">
+        <div class="special-media reveal">
+          <img src="assets/full-fit.png" alt="Full GRODT fit with sleeveless t-shirt and bone print shorts, dumbbells on the ground" loading="lazy" />
+          <div class="special-badge">First<br />50<br />Only</div>
+        </div>
+        <div class="special-copy">
+          <p class="section-kicker reveal">Launch Special</p>
+          <h2 class="reveal">$100 Per Set</h2>
+          <p class="special-lead reveal">The first 50 customers get the full set for $100. Pick your top, sleeved or sleeveless t-shirt, and we handle the rest.</p>
+          <ul class="special-list reveal">
+            <li>Your choice of sleeved or sleeveless t-shirt</li>
+            <li>Limited to the first 50 customers</li>
+            <li>Once the 50 are gone, the price goes back up</li>
+          </ul>
+          <a href="#shop" class="btn btn-red reveal">Claim Your Set</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Shop -->
+    <section class="shop" id="shop">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <p class="section-kicker reveal">Drop 01</p>
+            <h2 class="reveal">Shop The Collection</h2>
+          </div>
+          <p class="section-note reveal">Heavyweight cotton and prints that hold up. Limited runs, so when a piece sells out it stays gone.</p>
+        </div>
+
+        <div class="product-grid">
+          <article class="product reveal">
+            <div class="product-media">
+              <img class="img-main" src="assets/cutoff-hoodie.png" alt="GRODT Cut-Off Hoodie in black with skeleton deadlift print" loading="lazy" />
+              <img class="img-alt" src="assets/cutoff-hoodie-hood.png" alt="GRODT Cut-Off Hoodie worn with the hood up" loading="lazy" />
+              <span class="product-tag">Bestseller</span>
+              <button class="add-btn" data-name="GRODT Cut-Off Hoodie" data-price="75">Add to Cart</button>
+            </div>
+            <div class="product-info">
+              <p class="product-type">Sleeveless Hoodie</p>
+              <h3>GRODT Cut-Off Hoodie</h3>
+              <p class="product-price">$75</p>
+              <div class="size-row" role="group" aria-label="Select a size for the GRODT Cut-Off Hoodie">
+                <button class="size-btn">S</button>
+                <button class="size-btn">M</button>
+                <button class="size-btn">L</button>
+                <button class="size-btn">XL</button>
+                <button class="size-btn">2XL</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="product reveal">
+            <div class="product-media">
+              <img class="img-main" src="assets/oversized-tee.png" alt="GRODT Oversized T-Shirt in black with skeleton deadlift print" loading="lazy" />
+              <img class="img-alt" src="assets/oversized-tee-alt.png" alt="GRODT Oversized T-Shirt front view against a red brick wall" loading="lazy" />
+              <span class="product-tag">New</span>
+              <button class="add-btn" data-name="GRODT Oversized T-Shirt" data-price="60">Add to Cart</button>
+            </div>
+            <div class="product-info">
+              <p class="product-type">Oversized Tee</p>
+              <h3>GRODT Oversized T-Shirt</h3>
+              <p class="product-price">$60</p>
+              <div class="size-row" role="group" aria-label="Select a size for the GRODT Oversized T-Shirt">
+                <button class="size-btn">S</button>
+                <button class="size-btn">M</button>
+                <button class="size-btn">L</button>
+                <button class="size-btn">XL</button>
+                <button class="size-btn">2XL</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="product reveal">
+            <div class="product-media">
+              <img class="img-main" src="assets/oversized-cutoff-tee.png" alt="GRODT Oversized Cut-Off T-Shirt in black, sleeveless with raw edges" loading="lazy" />
+              <img class="img-alt" src="assets/cutoff-tee-alt.png" alt="GRODT Oversized Cut-Off T-Shirt front view" loading="lazy" />
+              <span class="product-tag">New</span>
+              <button class="add-btn" data-name="GRODT Oversized Cut-Off T-Shirt" data-price="60">Add to Cart</button>
+            </div>
+            <div class="product-info">
+              <p class="product-type">Oversized Cut-Off Tee</p>
+              <h3>GRODT Oversized Cut-Off T-Shirt</h3>
+              <p class="product-price">$60</p>
+              <div class="size-row" role="group" aria-label="Select a size for the GRODT Oversized Cut-Off T-Shirt">
+                <button class="size-btn">S</button>
+                <button class="size-btn">M</button>
+                <button class="size-btn">L</button>
+                <button class="size-btn">XL</button>
+                <button class="size-btn">2XL</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="product reveal">
+            <div class="product-media">
+              <img class="img-main" src="assets/shorts.png" alt="GRODT Shorts in black with bone print and arched logo" loading="lazy" />
+              <img class="img-alt" src="assets/full-fit.png" alt="GRODT Shorts worn as part of the full training fit" loading="lazy" />
+              <span class="product-tag">New</span>
+              <button class="add-btn" data-name="GRODT Shorts" data-price="65">Add to Cart</button>
+            </div>
+            <div class="product-info">
+              <p class="product-type">Training Shorts</p>
+              <h3>GRODT Shorts</h3>
+              <p class="product-price">$65</p>
+              <div class="size-row" role="group" aria-label="Select a size for the GRODT Shorts">
+                <button class="size-btn">S</button>
+                <button class="size-btn">M</button>
+                <button class="size-btn">L</button>
+                <button class="size-btn">XL</button>
+                <button class="size-btn">2XL</button>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Divider ticker -->
+    <div class="ticker ticker-large" aria-hidden="true">
+      <div class="ticker-track">
+        <span>Get Ripped</span><span class="dot">&#9670;</span>
+        <span>Or Die Trying</span><span class="dot">&#9670;</span>
+        <span>Detroit Made</span><span class="dot">&#9670;</span>
+        <span>Get Ripped</span><span class="dot">&#9670;</span>
+        <span>Or Die Trying</span><span class="dot">&#9670;</span>
+        <span>Detroit Made</span><span class="dot">&#9670;</span>
+      </div>
+    </div>
+
+    <!-- Lookbook -->
+    <section class="lookbook" id="lookbook">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <p class="section-kicker reveal">Field Tested</p>
+            <h2 class="reveal">The Lookbook</h2>
+          </div>
+          <p class="section-note reveal">Shot in Detroit with people who actually train in the gear. No studio, no retakes.</p>
+        </div>
+        <div class="lookbook-grid">
+          <figure class="look reveal look-tall">
+            <img src="assets/lookbook-jump.png" alt="Athlete in GRODT tee and shorts box jumping onto a steel trailer frame" loading="lazy" />
+            <figcaption>Box Jumps, Detroit</figcaption>
+          </figure>
+          <figure class="look reveal">
+            <img src="assets/cutoff-hoodie-hood.png" alt="Athlete in the GRODT Cut-Off Hoodie with the hood up" loading="lazy" />
+            <figcaption>Cut-Off Hoodie</figcaption>
+          </figure>
+          <figure class="look reveal">
+            <img src="assets/oversized-tee.png" alt="Athlete in the GRODT Oversized T-Shirt" loading="lazy" />
+            <figcaption>Oversized T-Shirt</figcaption>
+          </figure>
+          <figure class="look reveal look-tall">
+            <img src="assets/lookbook-crew.png" alt="Two athletes in GRODT cut-off hoodies resting on trailer tires" loading="lazy" />
+            <figcaption>The Crew</figcaption>
+          </figure>
+          <figure class="look reveal">
+            <img src="assets/full-fit.png" alt="Full GRODT training fit with sleeveless tee and bone print shorts" loading="lazy" />
+            <figcaption>The Full Set</figcaption>
+          </figure>
+          <figure class="look reveal">
+            <img src="assets/oversized-cutoff-tee.png" alt="Athlete in the GRODT Oversized Cut-Off T-Shirt" loading="lazy" />
+            <figcaption>Oversized Cut-Off</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- Story -->
+    <section class="story" id="story">
+      <div class="container story-grid">
+        <div class="story-copy">
+          <p class="section-kicker reveal">Detroit Made</p>
+          <h2 class="reveal">Built Where The Work Gets Done</h2>
+          <p class="reveal">Get Ripped Or Die Trying started in Detroit, a city that has never been handed anything. The name is a standard, not a slogan. You show up, you put the weight on the bar, and you keep your word to yourself.</p>
+          <p class="reveal">Every piece is cut from heavyweight fabric and printed to survive years of training, washing, and wearing. We keep the runs small and the quality high because we would rather sell you one shirt that lasts than five that fall apart.</p>
+          <div class="story-stats reveal">
+            <div class="stat">
+              <span class="stat-num">313</span>
+              <span class="stat-label">Detroit Roots</span>
+            </div>
+            <div class="stat">
+              <span class="stat-num">50</span>
+              <span class="stat-label">Sets At Launch Price</span>
+            </div>
+            <div class="stat">
+              <span class="stat-num">0</span>
+              <span class="stat-label">Excuses</span>
+            </div>
+          </div>
+        </div>
+        <div class="story-media reveal">
+          <img src="assets/lookbook-crew.png" alt="Two GRODT athletes seated on trailer tires outside a red brick building" loading="lazy" />
+        </div>
+      </div>
+    </section>
+
+    <!-- Newsletter -->
+    <section class="signup" id="signup">
+      <div class="container signup-inner">
+        <img class="signup-logo reveal" src="assets/grodt-logo.png" alt="" aria-hidden="true" loading="lazy" />
+        <h2 class="reveal">Get First Dibs</h2>
+        <p class="reveal">Drops are limited and the first 50 sets will not last. Join the list for early access to new gear and restocks.</p>
+        <form class="signup-form reveal" id="signupForm">
+          <input type="email" name="email" placeholder="Your email address" required aria-label="Email address" />
+          <button type="submit" class="btn btn-red">Sign Me Up</button>
+        </form>
+        <p class="signup-fine reveal">No spam. Just new drops and restock alerts.</p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-grid">
+      <div class="footer-brand">
+        <img src="assets/grodt-logo.png" alt="Get Ripped Or Die Trying logo" />
+        <p>Fitness apparel built in Detroit for people who take the work seriously.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Shop</h4>
+        <a href="#shop">Cut-Off Hoodie</a>
+        <a href="#shop">Oversized T-Shirt</a>
+        <a href="#shop">Oversized Cut-Off T-Shirt</a>
+        <a href="#shop">Shorts</a>
+      </div>
+      <div class="footer-col">
+        <h4>Brand</h4>
+        <a href="#story">Our Story</a>
+        <a href="#lookbook">Lookbook</a>
+        <a href="#special">The First 50</a>
+      </div>
+      <div class="footer-col">
+        <h4>Follow Us</h4>
+        <a href="https://www.instagram.com/getrippedodt?utm_source=qr" target="_blank" rel="noopener">Instagram</a>
+      </div>
+    </div>
+    <div class="container footer-bottom">
+      <p>&copy; 2026 Get Ripped Or Die Trying. Detroit, MI. All rights reserved.</p>
+      <p>GRODT&trade;</p>
+    </div>
+  </footer>
+
+  <!-- Cart drawer -->
+  <div class="cart-overlay" id="cartOverlay"></div>
+  <aside class="cart-drawer" id="cartDrawer" aria-label="Shopping cart" aria-hidden="true">
+    <div class="cart-head">
+      <h3>Your Cart <span class="cart-head-count" id="cartHeadCount"></span></h3>
+      <button class="cart-close" id="cartClose" aria-label="Close cart">&times;</button>
+    </div>
+    <div class="cart-items" id="cartItems"></div>
+    <div class="cart-foot">
+      <div class="cart-total">
+        <span>Subtotal</span>
+        <span id="cartTotal">$0</span>
+      </div>
+      <p class="cart-note">Shipping calculated at checkout. First 50 customers get the set for $100.</p>
+      <button class="btn btn-red cart-checkout" id="checkoutBtn">Checkout</button>
+    </div>
+  </aside>
+
+  <!-- Cart toast -->
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="js/script.js"></script>
+</body>
+</html>

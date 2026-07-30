@@ -1,0 +1,17 @@
+# Environment files
+.env
+.env.*
+*.local
+
+# Dependencies
+node_modules/
+
+# macOS
+.DS_Store
+
+# Editor
+.vscode/
+.idea/
+
+# Logs
+*.log
