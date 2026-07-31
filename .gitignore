@@ -7,6 +7,12 @@
 # Dependencies
 node_modules/
 
+# Cursor
+.cursor/
+
+# Vercel
+.vercel/
+
 # macOS
 .DS_Store
 

@@ -4,14 +4,10 @@
   "private": true,
   "description": "Get Ripped Or Die Trying — Detroit fitness apparel",
   "scripts": {
-    "build": "node -e \"console.log('Static site — no build step required.')\"",
-    "dev": "vercel dev",
+    "build": "sh -c 'test -f public/index.html && echo \"Build OK: public/index.html found\"'",
     "start": "python3 -m http.server 8080 --directory public"
   },
   "dependencies": {
     "stripe": "^17.7.0"
-  },
-  "engines": {
-    "node": ">=18"
   }
 }
