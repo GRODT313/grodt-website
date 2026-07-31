@@ -4,12 +4,11 @@ Official website for GRODT, a fitness apparel brand based in Detroit, MI.
 
 ## Structure
 
-- `index.html` — shop, lookbook, story, contact, email signup
-- `success.html` — post-checkout confirmation
-- `css/styles.css` — styles
-- `js/script.js` — cart, Stripe checkout, contact form
+- `public/` — static site (HTML, CSS, JS, images)
+- `public/index.html` — shop, lookbook, story, contact, email signup
+- `public/success.html` — post-checkout confirmation
 - `api/create-checkout-session.js` — Vercel serverless Stripe Checkout
-- `assets/` — logo and photography
+- `vercel.json` — Output Directory set to `public`
 
 ## Products
 
@@ -56,8 +55,8 @@ The first time someone submits, FormSubmit emails that address asking you to con
 
 1. Import the `GRODT313/grodt-website` GitHub repo
 2. Framework Preset: **Other**
-3. Build Command: `npm run build` (optional no-op)
-4. Output Directory: leave blank / `.`
+3. Build Command: `npm run build`
+4. Output Directory: `public`
 5. Add `STRIPE_SECRET_KEY` as above
 6. Deploy
 
