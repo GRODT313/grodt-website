@@ -43,10 +43,12 @@ module.exports = async function handler(req, res) {
     return;
   }
 
-  if (!process.env.STRIPE_SECRET_KEY) {
+  const stripeSecret = (process.env.STRIPE_SECRET_KEY || "").trim();
+
+  if (!stripeSecret) {
     res.status(500).json({
       error:
-        "Checkout is not configured yet. Add STRIPE_SECRET_KEY in your Vercel environment variables.",
+        "STRIPE_SECRET_KEY is missing in this deployment. In Vercel → Settings → Environment Variables, add STRIPE_SECRET_KEY for Production, then Redeploy (without build cache).",
     });
     return;
   }
@@ -110,7 +112,7 @@ module.exports = async function handler(req, res) {
   const shippingAmount = subtotal >= 7500 ? 0 : 800;
 
   try {
-    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+    const stripe = new Stripe(stripeSecret);
     const origin = getOrigin(req);
 
     const session = await stripe.checkout.sessions.create({

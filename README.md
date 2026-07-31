@@ -30,12 +30,13 @@ Checkout uses Stripe Checkout Sessions. Prices are validated on the server — t
 2. Copy your **Secret key** (`sk_test_...` for testing, `sk_live_...` for real payments)
 3. In Vercel → Project → Settings → Environment Variables, add:
 
-| Name | Value |
-| --- | --- |
-| `STRIPE_SECRET_KEY` | your Stripe secret key |
+| Name | Value | Environments |
+| --- | --- | --- |
+| `STRIPE_SECRET_KEY` | your Stripe secret key (`sk_test_...` or `sk_live_...`) | **Production** (and Preview if you want) |
 
-4. Redeploy the project after adding the variable
-5. Test with Stripe test cards: [https://stripe.com/docs/testing](https://stripe.com/docs/testing)
+4. **Redeploy is required** after adding or editing env vars. Deployments → ⋯ → Redeploy → turn off “Use existing Build Cache”
+5. Confirm the key is live: open `https://getrippedodt.com/api/health` — `stripeConfigured` should be `true`
+6. Test with Stripe test cards: [https://stripe.com/docs/testing](https://stripe.com/docs/testing)
 
 Local checkout testing:
 
