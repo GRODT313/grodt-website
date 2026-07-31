@@ -708,6 +708,105 @@ h2 { font-size: clamp(2.2rem, 5vw, 3.6rem); }
   border: 1px solid var(--line);
 }
 
+/* ---------- Contact ---------- */
+
+.contact {
+  padding: 6rem 0;
+  border-top: 1px solid var(--line);
+  background: linear-gradient(180deg, var(--black) 0%, var(--charcoal) 100%);
+}
+
+.contact-grid {
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: 3.5rem;
+  align-items: start;
+}
+
+.contact-copy p:not(.section-kicker) {
+  color: var(--bone-dim);
+  margin-top: 1rem;
+  max-width: 420px;
+}
+
+.contact-direct {
+  margin-top: 1.5rem !important;
+}
+
+.contact-direct a {
+  color: var(--red);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.contact-direct a:hover { text-decoration: underline; }
+
+.contact-form {
+  display: grid;
+  gap: 1rem;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  padding: 1.75rem;
+}
+
+.contact-form label {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.contact-form label span {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--bone-dim);
+}
+
+.contact-form label span em {
+  font-style: normal;
+  font-weight: 500;
+  text-transform: none;
+  letter-spacing: 0;
+  opacity: 0.8;
+}
+
+.contact-form input,
+.contact-form textarea {
+  width: 100%;
+  background: var(--black);
+  border: 1px solid var(--line);
+  color: var(--bone);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  padding: 0.85rem 1rem;
+  outline: none;
+  transition: border-color 0.2s ease;
+  resize: vertical;
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus { border-color: var(--red); }
+
+.contact-form input::placeholder,
+.contact-form textarea::placeholder { color: rgba(185, 178, 162, 0.55); }
+
+.contact-form .honey {
+  position: absolute;
+  left: -9999px;
+  opacity: 0;
+  height: 0;
+  width: 0;
+  pointer-events: none;
+}
+
+.contact-form .btn { justify-self: start; margin-top: 0.25rem; }
+
+.contact-status {
+  min-height: 1.25rem;
+  font-size: 0.85rem;
+  color: var(--bone-dim);
+}
+
 /* ---------- Signup ---------- */
 
 .signup {
@@ -1078,11 +1177,36 @@ h2 { font-size: clamp(2.2rem, 5vw, 3.6rem); }
   .section-head { flex-direction: column; align-items: flex-start; gap: 1rem; }
 
   .special-grid,
-  .story-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+  .story-grid,
+  .contact-grid { grid-template-columns: 1fr; gap: 2.5rem; }
 
   .special-badge { right: 0.5rem; }
 
   .story-grid .story-media { order: -1; }
+}
+
+/* ---------- Status pages (success) ---------- */
+
+.status-page {
+  min-height: calc(100svh - var(--nav-h));
+  display: flex;
+  align-items: center;
+  padding: 4rem 0;
+  text-align: center;
+}
+
+.status-inner { max-width: 560px; }
+
+.status-page h1 {
+  font-family: var(--font-display);
+  font-size: clamp(2.4rem, 6vw, 4rem);
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+
+.status-page p {
+  color: var(--bone-dim);
+  margin-bottom: 2rem;
 }
 
 @media (max-width: 540px) {

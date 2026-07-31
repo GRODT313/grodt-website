@@ -37,6 +37,7 @@
       <a href="#shop">Shop</a>
       <a href="#lookbook">Lookbook</a>
       <a href="#story">Our Story</a>
+      <a href="#contact">Contact</a>
     </nav>
     <div class="nav-actions">
       <a href="#shop" class="btn btn-small">Shop Now</a>
@@ -108,7 +109,7 @@
               <img class="img-main" src="assets/cutoff-hoodie.png" alt="GRODT Cut-Off Hoodie in black with skeleton deadlift print" loading="lazy" />
               <img class="img-alt" src="assets/cutoff-hoodie-hood.png" alt="GRODT Cut-Off Hoodie worn with the hood up" loading="lazy" />
               <span class="product-tag">Bestseller</span>
-              <button class="add-btn" data-name="GRODT Cut-Off Hoodie" data-price="75">Add to Cart</button>
+              <button class="add-btn" data-id="cutoff-hoodie" data-name="GRODT Cut-Off Hoodie" data-price="75">Add to Cart</button>
             </div>
             <div class="product-info">
               <p class="product-type">Sleeveless Hoodie</p>
@@ -129,7 +130,7 @@
               <img class="img-main" src="assets/oversized-tee.png" alt="GRODT Oversized T-Shirt in black with skeleton deadlift print" loading="lazy" />
               <img class="img-alt" src="assets/oversized-tee-alt.png" alt="GRODT Oversized T-Shirt front view against a red brick wall" loading="lazy" />
               <span class="product-tag">New</span>
-              <button class="add-btn" data-name="GRODT Oversized T-Shirt" data-price="60">Add to Cart</button>
+              <button class="add-btn" data-id="oversized-tee" data-name="GRODT Oversized T-Shirt" data-price="60">Add to Cart</button>
             </div>
             <div class="product-info">
               <p class="product-type">Oversized Tee</p>
@@ -150,7 +151,7 @@
               <img class="img-main" src="assets/oversized-cutoff-tee.png" alt="GRODT Oversized Cut-Off T-Shirt in black, sleeveless with raw edges" loading="lazy" />
               <img class="img-alt" src="assets/cutoff-tee-alt.png" alt="GRODT Oversized Cut-Off T-Shirt front view" loading="lazy" />
               <span class="product-tag">New</span>
-              <button class="add-btn" data-name="GRODT Oversized Cut-Off T-Shirt" data-price="60">Add to Cart</button>
+              <button class="add-btn" data-id="oversized-cutoff-tee" data-name="GRODT Oversized Cut-Off T-Shirt" data-price="60">Add to Cart</button>
             </div>
             <div class="product-info">
               <p class="product-type">Oversized Cut-Off Tee</p>
@@ -171,7 +172,7 @@
               <img class="img-main" src="assets/shorts.png" alt="GRODT Shorts in black with bone print and arched logo" loading="lazy" />
               <img class="img-alt" src="assets/full-fit.png" alt="GRODT Shorts worn as part of the full training fit" loading="lazy" />
               <span class="product-tag">New</span>
-              <button class="add-btn" data-name="GRODT Shorts" data-price="65">Add to Cart</button>
+              <button class="add-btn" data-id="shorts" data-name="GRODT Shorts" data-price="65">Add to Cart</button>
             </div>
             <div class="product-info">
               <p class="product-type">Training Shorts</p>
@@ -270,6 +271,40 @@
       </div>
     </section>
 
+    <!-- Contact -->
+    <section class="contact" id="contact">
+      <div class="container contact-grid">
+        <div class="contact-copy">
+          <p class="section-kicker reveal">Reach Out</p>
+          <h2 class="reveal">Send Us A Message</h2>
+          <p class="reveal">Questions about sizing, the first 50 deal, wholesale, or anything else — drop a note and we'll get back to you.</p>
+          <p class="contact-direct reveal">Or email us directly at <a href="mailto:mal@getrippedodt.com">mal@getrippedodt.com</a></p>
+        </div>
+        <form class="contact-form reveal" id="contactForm" novalidate>
+          <input type="hidden" name="_subject" value="New message from GRODT website" />
+          <input type="text" name="_honey" class="honey" tabindex="-1" autocomplete="off" aria-hidden="true" />
+          <label>
+            <span>Name</span>
+            <input type="text" name="name" required autocomplete="name" placeholder="Your name" />
+          </label>
+          <label>
+            <span>Email</span>
+            <input type="email" name="email" required autocomplete="email" placeholder="you@email.com" />
+          </label>
+          <label>
+            <span>Phone <em>(optional)</em></span>
+            <input type="tel" name="phone" autocomplete="tel" placeholder="(313) 555-0100" />
+          </label>
+          <label>
+            <span>Message</span>
+            <textarea name="message" rows="5" required placeholder="How can we help?"></textarea>
+          </label>
+          <button type="submit" class="btn btn-red" id="contactSubmit">Send Message</button>
+          <p class="contact-status" id="contactStatus" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
+
     <!-- Newsletter -->
     <section class="signup" id="signup">
       <div class="container signup-inner">
@@ -305,10 +340,12 @@
         <a href="#story">Our Story</a>
         <a href="#lookbook">Lookbook</a>
         <a href="#special">The First 50</a>
+        <a href="#contact">Contact</a>
       </div>
       <div class="footer-col">
         <h4>Follow Us</h4>
         <a href="https://www.instagram.com/getrippedodt?utm_source=qr" target="_blank" rel="noopener">Instagram</a>
+        <a href="mailto:mal@getrippedodt.com">mal@getrippedodt.com</a>
       </div>
     </div>
     <div class="container footer-bottom">
@@ -330,7 +367,7 @@
         <span>Subtotal</span>
         <span id="cartTotal">$0</span>
       </div>
-      <p class="cart-note">Shipping calculated at checkout. First 50 customers get the set for $100.</p>
+      <p class="cart-note">Secure checkout with Stripe. Free US shipping on orders $75+.</p>
       <button class="btn btn-red cart-checkout" id="checkoutBtn">Checkout</button>
     </div>
   </aside>

@@ -177,8 +177,45 @@
     if (e.key === "Escape") closeCart();
   });
 
-  checkoutBtn.addEventListener("click", function () {
-    showToast("Checkout is coming soon. Your cart is saved.");
+  checkoutBtn.addEventListener("click", async function () {
+    if (cart.length === 0) {
+      showToast("Your cart is empty");
+      return;
+    }
+
+    const originalLabel = checkoutBtn.textContent;
+    checkoutBtn.disabled = true;
+    checkoutBtn.textContent = "Redirecting...";
+
+    try {
+      const response = await fetch("/api/create-checkout-session", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          items: cart.map(function (item) {
+            return {
+              id: item.id,
+              size: item.size,
+              qty: item.qty,
+            };
+          }),
+        }),
+      });
+
+      const data = await response.json().catch(function () {
+        return {};
+      });
+
+      if (!response.ok || !data.url) {
+        throw new Error(data.error || "Unable to start checkout");
+      }
+
+      window.location.href = data.url;
+    } catch (err) {
+      showToast(err.message || "Checkout failed. Try again.");
+      checkoutBtn.disabled = false;
+      checkoutBtn.textContent = originalLabel;
+    }
   });
 
   // Size selection
@@ -207,19 +244,25 @@
         return;
       }
 
+      const id = btn.dataset.id;
       const name = btn.dataset.name;
       const price = Number(btn.dataset.price);
       const size = selected.textContent;
       const image = product.querySelector(".img-main").getAttribute("src");
 
+      if (!id) {
+        showToast("This product is missing a product id");
+        return;
+      }
+
       const existing = cart.find(function (item) {
-        return item.name === name && item.size === size;
+        return item.id === id && item.size === size;
       });
 
       if (existing) {
         existing.qty += 1;
       } else {
-        cart.push({ name: name, price: price, size: size, image: image, qty: 1 });
+        cart.push({ id: id, name: name, price: price, size: size, image: image, qty: 1 });
       }
 
       saveCart();
@@ -228,14 +271,107 @@
     });
   });
 
+  // Drop cart lines that predate product ids so checkout can validate
+  cart = cart.filter(function (item) {
+    return item && item.id && item.size && item.qty;
+  });
+  saveCart();
   renderCart();
 
-  // Newsletter signup
+  // Show a note if the shopper canceled Stripe Checkout
+  if (new URLSearchParams(window.location.search).get("checkout") === "canceled") {
+    showToast("Checkout canceled. Your cart is still here.");
+    history.replaceState({}, "", window.location.pathname + window.location.hash);
+  }
+
+  // Contact form → mal@getrippedodt.com via FormSubmit
+  const contactForm = document.getElementById("contactForm");
+  const contactStatus = document.getElementById("contactStatus");
+  const contactSubmit = document.getElementById("contactSubmit");
+
+  contactForm.addEventListener("submit", async function (e) {
+    e.preventDefault();
+
+    if (contactForm.querySelector("input[name='_honey']").value) {
+      return;
+    }
+
+    const name = contactForm.querySelector("input[name='name']").value.trim();
+    const email = contactForm.querySelector("input[name='email']").value.trim();
+    const phone = contactForm.querySelector("input[name='phone']").value.trim();
+    const message = contactForm.querySelector("textarea[name='message']").value.trim();
+
+    if (!name || !email || !message) {
+      contactStatus.textContent = "Please fill in your name, email, and message.";
+      return;
+    }
+
+    contactSubmit.disabled = true;
+    contactSubmit.textContent = "Sending...";
+    contactStatus.textContent = "";
+
+    try {
+      const response = await fetch("https://formsubmit.co/ajax/mal@getrippedodt.com", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          name: name,
+          email: email,
+          phone: phone || "Not provided",
+          message: message,
+          _subject: "New message from GRODT website",
+        }),
+      });
+
+      const data = await response.json().catch(function () {
+        return {};
+      });
+
+      if (!response.ok) {
+        throw new Error(data.message || "Could not send message");
+      }
+
+      contactForm.reset();
+      contactStatus.textContent = "Message sent. We'll reach out soon.";
+      showToast("Message sent to GRODT");
+    } catch (err) {
+      contactStatus.textContent =
+        "Couldn't send right now. Email us at mal@getrippedodt.com.";
+    } finally {
+      contactSubmit.disabled = false;
+      contactSubmit.textContent = "Send Message";
+    }
+  });
+
+  // Newsletter signup → same inbox as contact
   const form = document.getElementById("signupForm");
 
-  form.addEventListener("submit", function (e) {
+  form.addEventListener("submit", async function (e) {
     e.preventDefault();
-    showToast("You're on the list. First dibs on the next drop.");
-    form.querySelector("input[name='email']").value = "";
+    const emailInput = form.querySelector("input[name='email']");
+    const email = emailInput.value.trim();
+    if (!email) return;
+
+    try {
+      await fetch("https://formsubmit.co/ajax/mal@getrippedodt.com", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          email: email,
+          _subject: "GRODT grind list signup",
+          message: "New email signup from the website.",
+        }),
+      });
+      showToast("You're on the list. First dibs on the next drop.");
+      emailInput.value = "";
+    } catch (err) {
+      showToast("Couldn't sign you up. Email mal@getrippedodt.com.");
+    }
   });
 })();
