@@ -25,7 +25,25 @@ function getOrigin(req) {
   const proto = req.headers["x-forwarded-proto"] || "https";
   const host = req.headers["x-forwarded-host"] || req.headers.host;
   if (host) return proto + "://" + host;
-  return "http://localhost:3000";
+  return "https://getrippedodt.com";
+}
+
+function readBody(req) {
+  let body = req.body;
+
+  if (body == null) return null;
+
+  if (Buffer.isBuffer(body)) {
+    body = body.toString("utf8");
+  }
+
+  if (typeof body === "string") {
+    const trimmed = body.trim();
+    if (!trimmed) return null;
+    return JSON.parse(trimmed);
+  }
+
+  return body;
 }
 
 module.exports = async function handler(req, res) {
@@ -53,14 +71,20 @@ module.exports = async function handler(req, res) {
     return;
   }
 
-  let body = req.body;
-  if (typeof body === "string") {
-    try {
-      body = JSON.parse(body);
-    } catch (e) {
-      res.status(400).json({ error: "Invalid JSON body" });
-      return;
-    }
+  if (!/^sk_(test|live)_/.test(stripeSecret)) {
+    res.status(500).json({
+      error:
+        "STRIPE_SECRET_KEY does not look like a Stripe secret key. Use the Secret key from Stripe Dashboard → Developers → API keys (starts with sk_test_ or sk_live_).",
+    });
+    return;
+  }
+
+  let body;
+  try {
+    body = readBody(req);
+  } catch (e) {
+    res.status(400).json({ error: "Invalid JSON body" });
+    return;
   }
 
   const items = body && Array.isArray(body.items) ? body.items : null;
@@ -99,10 +123,10 @@ module.exports = async function handler(req, res) {
         currency: "usd",
         unit_amount: product.price,
         product_data: {
-          name: product.name + " — Size " + size,
+          name: product.name + " - Size " + size,
           metadata: {
-            product_id: item.id,
-            size: size,
+            product_id: String(item.id),
+            size: String(size),
           },
         },
       },
@@ -110,10 +134,10 @@ module.exports = async function handler(req, res) {
   }
 
   const shippingAmount = subtotal >= 7500 ? 0 : 800;
+  const origin = getOrigin(req);
 
   try {
     const stripe = new Stripe(stripeSecret);
-    const origin = getOrigin(req);
 
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
@@ -130,17 +154,13 @@ module.exports = async function handler(req, res) {
               currency: "usd",
             },
             display_name:
-              shippingAmount === 0
-                ? "Free US shipping"
-                : "US shipping",
-            delivery_estimate: {
-              minimum: { unit: "business_day", value: 3 },
-              maximum: { unit: "business_day", value: 7 },
-            },
+              shippingAmount === 0 ? "Free US shipping" : "US shipping",
           },
         },
       ],
-      phone_number_collection: { enabled: true },
+      phone_number_collection: {
+        enabled: true,
+      },
       success_url: origin + "/success.html?session_id={CHECKOUT_SESSION_ID}",
       cancel_url: origin + "/?checkout=canceled",
       metadata: {
@@ -148,11 +168,26 @@ module.exports = async function handler(req, res) {
       },
     });
 
+    if (!session.url) {
+      res.status(500).json({ error: "Stripe did not return a checkout URL." });
+      return;
+    }
+
     res.status(200).json({ url: session.url });
   } catch (err) {
-    console.error("Stripe checkout error:", err);
+    console.error("Stripe checkout error:", {
+      type: err && err.type,
+      code: err && err.code,
+      message: err && err.message,
+      statusCode: err && err.statusCode,
+      rawType: err && err.rawType,
+    });
+
+    const message = (err && err.message) || "Unable to start checkout.";
     res.status(500).json({
-      error: "Unable to start checkout. Please try again in a moment.",
+      error: message,
+      code: (err && err.code) || null,
+      type: (err && err.type) || null,
     });
   }
 };
