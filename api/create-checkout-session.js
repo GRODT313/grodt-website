@@ -161,6 +161,10 @@ module.exports = async function handler(req, res) {
             },
             display_name:
               shippingAmount === 0 ? "Free US shipping" : "US shipping",
+            delivery_estimate: {
+              minimum: { unit: "business_day", value: 12 },
+              maximum: { unit: "business_day", value: 28 },
+            },
           },
         },
       ],
