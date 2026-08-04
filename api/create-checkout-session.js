@@ -61,7 +61,13 @@ module.exports = async function handler(req, res) {
     return;
   }
 
-  const stripeSecret = (process.env.STRIPE_SECRET_KEY || "").trim();
+  // Strip quotes/whitespace/zero-width chars that often get pasted into Vercel
+  const stripeSecret = String(process.env.STRIPE_SECRET_KEY || "")
+    .replace(/^\uFEFF/, "")
+    .replace(/[\u200B-\u200D\uFEFF]/g, "")
+    .trim()
+    .replace(/^["']|["']$/g, "")
+    .trim();
 
   if (!stripeSecret) {
     res.status(500).json({
@@ -71,10 +77,10 @@ module.exports = async function handler(req, res) {
     return;
   }
 
-  if (!/^sk_(test|live)_/.test(stripeSecret)) {
+  if (!/^sk_(test|live)_[A-Za-z0-9]+$/.test(stripeSecret)) {
     res.status(500).json({
       error:
-        "STRIPE_SECRET_KEY does not look like a Stripe secret key. Use the Secret key from Stripe Dashboard → Developers → API keys (starts with sk_test_ or sk_live_).",
+        "STRIPE_SECRET_KEY looks malformed. In Stripe → Developers → API keys, copy the Secret key only (starts with sk_test_ or sk_live_), paste it into Vercel with no quotes or spaces, then Redeploy.",
     });
     return;
   }
