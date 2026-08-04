@@ -1,6 +1,6 @@
 # Get Ripped Or Die Trying
 
-Official website for GRODT, a fitness apparel brand based in Detroit, MI.
+Official website for GRODT, a fitness apparel brand.
 
 ## Structure
 
