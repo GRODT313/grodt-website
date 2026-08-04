@@ -864,10 +864,25 @@ h2 { font-size: clamp(2.2rem, 5vw, 3.6rem); }
 
 .footer-grid {
   display: grid;
-  grid-template-columns: 1.4fr 1fr 1fr 1.2fr;
-  gap: 3rem;
+  grid-template-columns: 1.5fr repeat(4, 1fr);
+  gap: 2.5rem;
   padding-bottom: 3rem;
 }
+
+.footer-legal {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  justify-content: flex-end;
+}
+
+.footer-legal a {
+  color: var(--bone-dim);
+  text-decoration: none;
+  font-size: 0.8rem;
+}
+
+.footer-legal a:hover { color: var(--red); }
 
 .footer-brand img { width: 110px; margin-bottom: 1rem; }
 
@@ -1093,6 +1108,13 @@ h2 { font-size: clamp(2.2rem, 5vw, 3.6rem); }
   margin: 0.75rem 0 1rem;
 }
 
+.cart-note a {
+  color: var(--bone);
+  text-decoration: underline;
+}
+
+.cart-note a:hover { color: var(--red); }
+
 .cart-checkout {
   display: block;
   width: 100%;
@@ -1223,7 +1245,18 @@ h2 { font-size: clamp(2.2rem, 5vw, 3.6rem); }
 
   .footer-grid { grid-template-columns: 1fr; gap: 2rem; }
 
-  .footer-bottom { flex-direction: column; text-align: center; }
+  .footer-bottom {
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+    gap: 1rem;
+  }
+
+  .footer-legal { justify-content: flex-start; }
 
   .nav-logo img { height: 48px; }
+}
+
+@media (max-width: 1024px) {
+  .footer-grid { grid-template-columns: 1fr 1fr; }
 }
