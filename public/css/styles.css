@@ -1102,6 +1102,21 @@ h2 { font-size: clamp(2.2rem, 5vw, 3.6rem); }
 
 .cart-total span:last-child { color: var(--red); }
 
+.cart-deal {
+  margin: 0.5rem 0 0;
+  color: var(--red);
+  font-size: 0.8rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.cart-deal[hidden] { display: none; }
+
+.cart-item-price s {
+  color: var(--bone-dim);
+  margin-right: 0.35rem;
+}
+
 .cart-note {
   color: var(--bone-dim);
   font-size: 0.78rem;

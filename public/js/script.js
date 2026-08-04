@@ -53,7 +53,10 @@
 
   // Cart state
   const STORAGE_KEY = "grodt-cart";
+  const TEE_IDS = { "oversized-tee": true, "oversized-cutoff-tee": true };
+  const SET_PRICE = 100;
   let cart = [];
+  let first50Remaining = 50;
 
   try {
     cart = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
@@ -69,7 +72,31 @@
   const cartItems = document.getElementById("cartItems");
   const cartTotal = document.getElementById("cartTotal");
   const cartHeadCount = document.getElementById("cartHeadCount");
+  const cartDeal = document.getElementById("cartDeal");
   const checkoutBtn = document.getElementById("checkoutBtn");
+
+  function getCartPricing() {
+    let teeUnits = 0;
+    let shortUnits = 0;
+    let regularTotal = 0;
+
+    cart.forEach(function (item) {
+      regularTotal += item.price * item.qty;
+      if (TEE_IDS[item.id]) teeUnits += item.qty;
+      if (item.id === "shorts") shortUnits += item.qty;
+    });
+
+    const setsApplied = Math.min(teeUnits, shortUnits, first50Remaining);
+    const savings = setsApplied * 25; // $125 regular tee+shorts -> $100 set
+    const total = regularTotal - savings;
+
+    return {
+      setsApplied: setsApplied,
+      savings: savings,
+      total: total,
+      regularTotal: regularTotal,
+    };
+  }
 
   function saveCart() {
     try {
@@ -85,6 +112,7 @@
 
   function renderCart() {
     const qty = cartQty();
+    const pricing = getCartPricing();
     cartCount.textContent = String(qty);
     cartHeadCount.textContent = qty > 0 ? "(" + qty + ")" : "";
 
@@ -95,6 +123,8 @@
         '<a href="#shop" class="btn btn-red" id="emptyShopBtn">Shop The Drop</a>' +
         "</div>";
       cartTotal.textContent = "$0";
+      cartDeal.hidden = true;
+      cartDeal.textContent = "";
       checkoutBtn.disabled = true;
       checkoutBtn.style.opacity = "0.5";
       const emptyBtn = document.getElementById("emptyShopBtn");
@@ -108,15 +138,42 @@
     checkoutBtn.style.opacity = "1";
     cartItems.innerHTML = "";
 
+    let teeSlots = pricing.setsApplied;
+    let shortSlots = pricing.setsApplied;
+
     cart.forEach(function (item, index) {
+      const lineTotal = item.price * item.qty;
+      let priceHtml = "$" + lineTotal;
+      let dealNote = "";
+
+      if (TEE_IDS[item.id] && teeSlots > 0) {
+        const used = Math.min(item.qty, teeSlots);
+        teeSlots -= used;
+        dealNote = used === item.qty
+          ? "Included in First 50 set"
+          : used + " included in First 50 set";
+      } else if (item.id === "shorts" && shortSlots > 0) {
+        const used = Math.min(item.qty, shortSlots);
+        shortSlots -= used;
+        dealNote = used === item.qty
+          ? "Included in First 50 set"
+          : used + " included in First 50 set";
+      }
+
+      if (dealNote) {
+        priceHtml = "<s>$" + lineTotal + "</s> Set deal";
+      }
+
       const row = document.createElement("div");
       row.className = "cart-item";
       row.innerHTML =
         '<img src="' + item.image + '" alt="" />' +
         "<div>" +
         '<p class="cart-item-name">' + item.name + "</p>" +
-        '<p class="cart-item-size">Size: ' + item.size + "</p>" +
-        '<p class="cart-item-price">$' + item.price * item.qty + "</p>" +
+        '<p class="cart-item-size">Size: ' + item.size +
+        (dealNote ? " · " + dealNote : "") +
+        "</p>" +
+        '<p class="cart-item-price">' + priceHtml + "</p>" +
         "</div>" +
         '<div class="cart-item-controls">' +
         '<div class="qty-row">' +
@@ -129,9 +186,47 @@
       cartItems.appendChild(row);
     });
 
-    const total = cart.reduce(function (sum, item) { return sum + item.price * item.qty; }, 0);
-    cartTotal.textContent = "$" + total;
+    cartTotal.textContent = "$" + pricing.total;
+
+    if (pricing.setsApplied > 0) {
+      cartDeal.hidden = false;
+      cartDeal.textContent =
+        "First 50 deal applied: " +
+        pricing.setsApplied +
+        (pricing.setsApplied === 1 ? " set" : " sets") +
+        " at $100 (save $" +
+        pricing.savings +
+        "). Hoodie not included.";
+    } else if (first50Remaining > 0) {
+      const hasTee = cart.some(function (item) { return TEE_IDS[item.id]; });
+      const hasShorts = cart.some(function (item) { return item.id === "shorts"; });
+      if (hasTee && !hasShorts) {
+        cartDeal.hidden = false;
+        cartDeal.textContent = "Add GRODT Shorts to unlock the $100 First 50 set.";
+      } else if (hasShorts && !hasTee) {
+        cartDeal.hidden = false;
+        cartDeal.textContent = "Add an oversized tee or cut-off tee to unlock the $100 First 50 set.";
+      } else {
+        cartDeal.hidden = true;
+        cartDeal.textContent = "";
+      }
+    } else {
+      cartDeal.hidden = false;
+      cartDeal.textContent = "First 50 sets are gone. Regular prices apply.";
+    }
   }
+
+  fetch("/api/first50-status")
+    .then(function (response) { return response.json(); })
+    .then(function (data) {
+      if (typeof data.remaining === "number") {
+        first50Remaining = data.remaining;
+        renderCart();
+      }
+    })
+    .catch(function () {
+      /* keep local default of 50 */
+    });
 
   cartItems.addEventListener("click", function (e) {
     const btn = e.target.closest("[data-action]");

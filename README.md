@@ -14,13 +14,13 @@ Official website for GRODT, a fitness apparel brand based in Detroit, MI.
 
 | Product | Price |
 | --- | --- |
-| Launch Special: set with sleeved or sleeveless t-shirt (first 50 customers) | $100 per set |
-| GRODT Cut-Off Hoodie | $75 |
+| First 50 Set: Oversized T-Shirt or Oversized Cut-Off T-Shirt + Shorts | $100 |
+| GRODT Cut-Off Hoodie | $75 (not part of First 50 deal) |
 | GRODT Oversized T-Shirt | $60 |
 | GRODT Oversized Cut-Off T-Shirt | $60 |
 | GRODT Shorts | $65 |
 
-Free US shipping on orders $75+.
+First 50 deal is applied automatically in cart/checkout when a qualifying tee and shorts are both in the cart. Limited to 50 completed set purchases. Free US shipping on orders $75+.
 
 ## Checkout (Stripe)
 

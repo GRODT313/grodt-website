@@ -1,25 +1,9 @@
 const Stripe = require("stripe");
-
-const PRODUCTS = {
-  "cutoff-hoodie": {
-    name: "GRODT Cut-Off Hoodie",
-    price: 7500,
-  },
-  "oversized-tee": {
-    name: "GRODT Oversized T-Shirt",
-    price: 6000,
-  },
-  "oversized-cutoff-tee": {
-    name: "GRODT Oversized Cut-Off T-Shirt",
-    price: 6000,
-  },
-  shorts: {
-    name: "GRODT Shorts",
-    price: 6500,
-  },
-};
-
-const SIZES = new Set(["S", "M", "L", "XL", "2XL"]);
+const {
+  priceItems,
+  getFirst50SetsSold,
+  getFirst50Limit,
+} = require("../lib/pricing");
 
 function getOrigin(req) {
   const proto = req.headers["x-forwarded-proto"] || "https";
@@ -46,6 +30,15 @@ function readBody(req) {
   return body;
 }
 
+function cleanSecret(value) {
+  return String(value || "")
+    .replace(/^\uFEFF/, "")
+    .replace(/[\u200B-\u200D\uFEFF]/g, "")
+    .trim()
+    .replace(/^["']|["']$/g, "")
+    .trim();
+}
+
 module.exports = async function handler(req, res) {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
@@ -61,13 +54,7 @@ module.exports = async function handler(req, res) {
     return;
   }
 
-  // Strip quotes/whitespace/zero-width chars that often get pasted into Vercel
-  const stripeSecret = String(process.env.STRIPE_SECRET_KEY || "")
-    .replace(/^\uFEFF/, "")
-    .replace(/[\u200B-\u200D\uFEFF]/g, "")
-    .trim()
-    .replace(/^["']|["']$/g, "")
-    .trim();
+  const stripeSecret = cleanSecret(process.env.STRIPE_SECRET_KEY);
 
   if (!stripeSecret) {
     res.status(500).json({
@@ -99,55 +86,36 @@ module.exports = async function handler(req, res) {
     return;
   }
 
-  const lineItems = [];
-  let subtotal = 0;
-
-  for (const item of items) {
-    const product = PRODUCTS[item.id];
-    if (!product) {
-      res.status(400).json({ error: "Unknown product in cart." });
-      return;
-    }
-
-    const size = String(item.size || "").toUpperCase();
-    if (!SIZES.has(size)) {
-      res.status(400).json({ error: "Pick a valid size for every item." });
-      return;
-    }
-
-    const qty = Number(item.qty);
-    if (!Number.isInteger(qty) || qty < 1 || qty > 20) {
-      res.status(400).json({ error: "Invalid quantity." });
-      return;
-    }
-
-    subtotal += product.price * qty;
-
-    lineItems.push({
-      quantity: qty,
-      price_data: {
-        currency: "usd",
-        unit_amount: product.price,
-        product_data: {
-          name: product.name + " - Size " + size,
-          metadata: {
-            product_id: String(item.id),
-            size: String(size),
-          },
-        },
-      },
-    });
-  }
-
-  const shippingAmount = subtotal >= 7500 ? 0 : 800;
-  const origin = getOrigin(req);
-
   try {
     const stripe = new Stripe(stripeSecret);
+    const limit = getFirst50Limit();
+    let setsAvailable = limit;
+
+    try {
+      const sold = await getFirst50SetsSold(stripe);
+      setsAvailable = Math.max(0, limit - sold);
+    } catch (countErr) {
+      console.error("First 50 count failed, allowing deal:", countErr.message);
+      setsAvailable = limit;
+    }
+
+    const priced = priceItems(items, setsAvailable);
+    if (priced.error) {
+      res.status(400).json({ error: priced.error });
+      return;
+    }
+
+    if (!priced.lineItems.length) {
+      res.status(400).json({ error: "Your cart is empty." });
+      return;
+    }
+
+    const shippingAmount = priced.subtotal >= 7500 ? 0 : 800;
+    const origin = getOrigin(req);
 
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
-      line_items: lineItems,
+      line_items: priced.lineItems,
       shipping_address_collection: {
         allowed_countries: ["US"],
       },
@@ -175,6 +143,7 @@ module.exports = async function handler(req, res) {
       cancel_url: origin + "/?checkout=canceled",
       metadata: {
         brand: "GRODT",
+        first50_sets: String(priced.setsApplied),
       },
     });
 
@@ -183,7 +152,11 @@ module.exports = async function handler(req, res) {
       return;
     }
 
-    res.status(200).json({ url: session.url });
+    res.status(200).json({
+      url: session.url,
+      setsApplied: priced.setsApplied,
+      setsRemaining: Math.max(0, setsAvailable - priced.setsApplied),
+    });
   } catch (err) {
     console.error("Stripe checkout error:", {
       type: err && err.type,
