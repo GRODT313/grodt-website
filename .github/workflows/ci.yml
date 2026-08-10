@@ -1,0 +1,41 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  production-checks:
+    name: Production checks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build
+        run: npm run build
+
+      - name: Pricing unit tests
+        run: npm test
+
+      - name: Static site audit
+        run: npm run check:site
+
+      - name: Syntax check API modules
+        run: |
+          node --check api/create-checkout-session.js
+          node --check api/first50-status.js
+          node --check api/health.js
+          node --check lib/pricing.js
+          node --check lib/cors.js
+          node --check public/js/script.js

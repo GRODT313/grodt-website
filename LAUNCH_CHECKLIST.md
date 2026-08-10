@@ -14,7 +14,7 @@ Production readiness audit completed on August 10, 2026.
 | Cross-browser basics | Passed |
 | Broken links / assets | Passed |
 | JavaScript / pricing logic | Fixed + tested |
-| GitHub Actions | Fixed (added) |
+| GitHub Actions | Fixed locally; push blocked until `workflow` scope granted |
 | Vercel deployment config | Fixed |
 
 ## Detailed results
