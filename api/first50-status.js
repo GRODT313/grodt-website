@@ -1,5 +1,6 @@
 const Stripe = require("stripe");
 const { getFirst50SetsSold, getFirst50Limit } = require("../lib/pricing");
+const { applyCors } = require("../lib/cors");
 
 function cleanSecret(value) {
   return String(value || "")
@@ -11,8 +12,13 @@ function cleanSecret(value) {
 }
 
 module.exports = async function handler(req, res) {
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Cache-Control", "no-store");
+  applyCors(req, res);
+  res.setHeader("Cache-Control", "public, max-age=60");
+
+  if (req.method === "OPTIONS") {
+    res.status(204).end();
+    return;
+  }
 
   if (req.method !== "GET") {
     res.status(405).json({ error: "Method not allowed" });
@@ -22,16 +28,18 @@ module.exports = async function handler(req, res) {
   const limit = getFirst50Limit();
   const stripeSecret = cleanSecret(process.env.STRIPE_SECRET_KEY);
 
+  const payload = {
+    active: true,
+    limit: limit,
+    sold: 0,
+    remaining: limit,
+    setPrice: 100,
+    includes: "Oversized T-Shirt or Oversized Cut-Off T-Shirt + Shorts",
+    excludes: "Cut-Off Hoodie",
+  };
+
   if (!stripeSecret) {
-    res.status(200).json({
-      active: true,
-      limit: limit,
-      sold: 0,
-      remaining: limit,
-      setPrice: 100,
-      includes: "Oversized T-Shirt or Oversized Cut-Off T-Shirt + Shorts",
-      excludes: "Cut-Off Hoodie",
-    });
+    res.status(200).json(payload);
     return;
   }
 
@@ -39,26 +47,14 @@ module.exports = async function handler(req, res) {
     const stripe = new Stripe(stripeSecret);
     const sold = await getFirst50SetsSold(stripe);
     const remaining = Math.max(0, limit - sold);
-
     res.status(200).json({
+      ...payload,
       active: remaining > 0,
-      limit: limit,
       sold: sold,
       remaining: remaining,
-      setPrice: 100,
-      includes: "Oversized T-Shirt or Oversized Cut-Off T-Shirt + Shorts",
-      excludes: "Cut-Off Hoodie",
     });
   } catch (err) {
     console.error("first50-status error:", err.message);
-    res.status(200).json({
-      active: true,
-      limit: limit,
-      sold: 0,
-      remaining: limit,
-      setPrice: 100,
-      includes: "Oversized T-Shirt or Oversized Cut-Off T-Shirt + Shorts",
-      excludes: "Cut-Off Hoodie",
-    });
+    res.status(200).json(payload);
   }
 };

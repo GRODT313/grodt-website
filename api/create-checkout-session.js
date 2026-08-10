@@ -4,6 +4,7 @@ const {
   getFirst50SetsSold,
   getFirst50Limit,
 } = require("../lib/pricing");
+const { applyCors } = require("../lib/cors");
 
 function getOrigin(req) {
   const proto = req.headers["x-forwarded-proto"] || "https";
@@ -24,6 +25,11 @@ function readBody(req) {
   if (typeof body === "string") {
     const trimmed = body.trim();
     if (!trimmed) return null;
+    if (trimmed.length > 20000) {
+      const err = new Error("Payload too large");
+      err.code = "PAYLOAD_TOO_LARGE";
+      throw err;
+    }
     return JSON.parse(trimmed);
   }
 
@@ -39,10 +45,25 @@ function cleanSecret(value) {
     .trim();
 }
 
+function publicCheckoutError(err) {
+  const type = err && err.type;
+  const code = err && err.code;
+
+  if (type === "StripeAuthenticationError" || code === "api_key_expired") {
+    return "Checkout is temporarily unavailable. Please try again later.";
+  }
+  if (code === "PAYLOAD_TOO_LARGE") {
+    return "Cart payload is too large.";
+  }
+  if (type === "StripeInvalidRequestError") {
+    return "Unable to start checkout. Please refresh and try again.";
+  }
+  return "Unable to start checkout. Please try again in a moment.";
+}
+
 module.exports = async function handler(req, res) {
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+  applyCors(req, res);
+  res.setHeader("Cache-Control", "no-store");
 
   if (req.method === "OPTIONS") {
     res.status(204).end();
@@ -59,15 +80,14 @@ module.exports = async function handler(req, res) {
   if (!stripeSecret) {
     res.status(500).json({
       error:
-        "STRIPE_SECRET_KEY is missing in this deployment. In Vercel → Settings → Environment Variables, add STRIPE_SECRET_KEY for Production, then Redeploy (without build cache).",
+        "Checkout is not configured yet. Please try again later.",
     });
     return;
   }
 
   if (!/^sk_(test|live)_[A-Za-z0-9]+$/.test(stripeSecret)) {
     res.status(500).json({
-      error:
-        "STRIPE_SECRET_KEY looks malformed. In Stripe → Developers → API keys, copy the Secret key only (starts with sk_test_ or sk_live_), paste it into Vercel with no quotes or spaces, then Redeploy.",
+      error: "Checkout is temporarily unavailable. Please try again later.",
     });
     return;
   }
@@ -76,6 +96,10 @@ module.exports = async function handler(req, res) {
   try {
     body = readBody(req);
   } catch (e) {
+    if (e && e.code === "PAYLOAD_TOO_LARGE") {
+      res.status(413).json({ error: publicCheckoutError(e) });
+      return;
+    }
     res.status(400).json({ error: "Invalid JSON body" });
     return;
   }
@@ -83,6 +107,10 @@ module.exports = async function handler(req, res) {
   const items = body && Array.isArray(body.items) ? body.items : null;
   if (!items || items.length === 0) {
     res.status(400).json({ error: "Your cart is empty." });
+    return;
+  }
+  if (items.length > 50) {
+    res.status(400).json({ error: "Too many items in cart." });
     return;
   }
 
@@ -148,7 +176,7 @@ module.exports = async function handler(req, res) {
     });
 
     if (!session.url) {
-      res.status(500).json({ error: "Stripe did not return a checkout URL." });
+      res.status(500).json({ error: "Unable to start checkout. Please try again in a moment." });
       return;
     }
 
@@ -163,14 +191,10 @@ module.exports = async function handler(req, res) {
       code: err && err.code,
       message: err && err.message,
       statusCode: err && err.statusCode,
-      rawType: err && err.rawType,
     });
 
-    const message = (err && err.message) || "Unable to start checkout.";
     res.status(500).json({
-      error: message,
-      code: (err && err.code) || null,
-      type: (err && err.type) || null,
+      error: publicCheckoutError(err),
     });
   }
 };

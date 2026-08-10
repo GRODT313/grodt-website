@@ -70,3 +70,13 @@ npm start
 ```
 
 Then visit http://localhost:8080
+
+
+## Production checks
+
+```bash
+npm install
+npm run check
+```
+
+See [LAUNCH_CHECKLIST.md](./LAUNCH_CHECKLIST.md) for the full launch audit.

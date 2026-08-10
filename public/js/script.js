@@ -3,6 +3,15 @@
 (function () {
   "use strict";
 
+  function escapeHtml(value) {
+    return String(value)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
+  }
+
   // Mobile menu
   const menuBtn = document.getElementById("menuBtn");
   const navLinks = document.getElementById("navLinks");
@@ -54,7 +63,6 @@
   // Cart state
   const STORAGE_KEY = "grodt-cart";
   const TEE_IDS = { "oversized-tee": true, "oversized-cutoff-tee": true };
-  const SET_PRICE = 100;
   let cart = [];
   let first50Remaining = 50;
 
@@ -167,21 +175,21 @@
       const row = document.createElement("div");
       row.className = "cart-item";
       row.innerHTML =
-        '<img src="' + item.image + '" alt="" />' +
+        '<img src="' + escapeHtml(item.image) + '" alt="" width="70" height="88" />' +
         "<div>" +
-        '<p class="cart-item-name">' + item.name + "</p>" +
-        '<p class="cart-item-size">Size: ' + item.size +
-        (dealNote ? " · " + dealNote : "") +
+        '<p class="cart-item-name">' + escapeHtml(item.name) + "</p>" +
+        '<p class="cart-item-size">Size: ' + escapeHtml(item.size) +
+        (dealNote ? " · " + escapeHtml(dealNote) : "") +
         "</p>" +
         '<p class="cart-item-price">' + priceHtml + "</p>" +
         "</div>" +
         '<div class="cart-item-controls">' +
         '<div class="qty-row">' +
-        '<button class="qty-btn" data-action="minus" data-index="' + index + '" aria-label="Decrease quantity">&minus;</button>' +
-        '<span class="qty-num">' + item.qty + "</span>" +
-        '<button class="qty-btn" data-action="plus" data-index="' + index + '" aria-label="Increase quantity">+</button>' +
+        '<button type="button" class="qty-btn" data-action="minus" data-index="' + index + '" aria-label="Decrease quantity">&minus;</button>' +
+        '<span class="qty-num">' + Number(item.qty) + "</span>" +
+        '<button type="button" class="qty-btn" data-action="plus" data-index="' + index + '" aria-label="Increase quantity">+</button>' +
         "</div>" +
-        '<button class="cart-item-remove" data-action="remove" data-index="' + index + '">Remove</button>' +
+        '<button type="button" class="cart-item-remove" data-action="remove" data-index="' + index + '">Remove</button>' +
         "</div>";
       cartItems.appendChild(row);
     });
@@ -315,13 +323,18 @@
 
   // Size selection
   document.querySelectorAll(".size-row").forEach(function (row) {
+    row.querySelectorAll(".size-btn").forEach(function (btn) {
+      btn.setAttribute("aria-pressed", "false");
+    });
     row.addEventListener("click", function (e) {
       const btn = e.target.closest(".size-btn");
       if (!btn) return;
       row.querySelectorAll(".size-btn").forEach(function (b) {
         b.classList.remove("selected");
+        b.setAttribute("aria-pressed", "false");
       });
       btn.classList.add("selected");
+      btn.setAttribute("aria-pressed", "true");
       row.classList.remove("needs-size");
     });
   });

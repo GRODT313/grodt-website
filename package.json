@@ -2,12 +2,18 @@
   "name": "grodt-website",
   "version": "1.0.0",
   "private": true,
-  "description": "Get Ripped Or Die Trying — Detroit fitness apparel",
+  "description": "Get Ripped Or Die Trying fitness apparel website",
   "scripts": {
-    "build": "sh -c 'test -f public/index.html && echo \"Build OK: public/index.html found\"'",
-    "start": "python3 -m http.server 8080 --directory public"
+    "build": "sh -c 'test -f public/index.html && test -f public/robots.txt && test -f public/sitemap.xml && echo \"Build OK\"'",
+    "start": "python3 -m http.server 8080 --directory public",
+    "test": "node scripts/check-pricing.js",
+    "check:site": "python3 scripts/check-site.py",
+    "check": "npm run build && npm test && npm run check:site"
   },
   "dependencies": {
     "stripe": "^17.7.0"
+  },
+  "engines": {
+    "node": ">=18"
   }
 }
