@@ -76,10 +76,10 @@ One-time setup in Stripe (do this in live mode):
 
 Fulfillment workflow for each order email:
 
-1. Place the order with your supplier using the **Ship to** address from the email — the package goes straight to the customer
-2. Make sure the supplier ships blind (no invoices or supplier branding in the package)
-3. When you get a tracking number, email it to the customer (their email is in the order email)
-4. Customer expectation is 3–6 weeks, matching the shipping policy
+1. Order the items from your supplier, shipped to **your own address**
+2. When they arrive, inspect them, then package and ship to the **customer ship-to address** from the order email
+3. Email the customer their tracking number (their email is in the order email)
+4. Keep the total supplier-transit plus your ship-out time inside the 3–6 week window from the shipping policy
 
 Backup: in Stripe → your profile → **Notification preferences**, turn on emails for successful payments so you're covered even if the webhook is ever down.
 

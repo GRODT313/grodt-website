@@ -83,7 +83,7 @@ function formatOrderEmail(session, lineItems) {
     );
   }
   lines.push("");
-  lines.push("SHIP TO (use this address with your supplier):");
+  lines.push("CUSTOMER SHIP-TO ADDRESS:");
   lines.push(formatAddress(shipping));
   lines.push("");
   lines.push("CUSTOMER CONTACT:");
@@ -91,8 +91,9 @@ function formatOrderEmail(session, lineItems) {
   lines.push("Phone: " + (customer.phone || "not provided"));
   lines.push("");
   lines.push(
-    "Next step: place this order with your supplier and have it shipped " +
-      "directly to the address above. Customer expects delivery in 3-6 weeks."
+    "Next steps: order these items from your supplier, then package and " +
+      "ship to the customer address above once they arrive. Customer " +
+      "expects delivery in 3-6 weeks."
   );
 
   return lines.join("\n");
