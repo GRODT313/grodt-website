@@ -35,6 +35,7 @@ jobs:
         run: |
           node --check api/create-checkout-session.js
           node --check api/first50-status.js
+          node --check api/stripe-webhook.js
           node --check api/health.js
           node --check lib/pricing.js
           node --check lib/cors.js

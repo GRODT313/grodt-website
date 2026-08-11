@@ -63,6 +63,26 @@ Notes:
 - Stripe collects the tax with each payment but does **not** file your Michigan return. File through [Michigan Treasury Online](https://mto.treasury.michigan.gov/) using the Dashboard report at **Tax → Reports** (or add Stripe's paid filing product).
 - Orders shipped to other states collect no tax, which is correct until you register in those states. Stripe's **Tax → Monitoring** page warns you if you're approaching another state's threshold.
 
+## Order fulfillment (dropshipping)
+
+When a customer completes checkout, `api/stripe-webhook.js` emails **mal@getrippedodt.com** with the full order: items, sizes, total paid, and the customer's shipping address and phone.
+
+One-time setup in Stripe (do this in live mode):
+
+1. Go to **Developers → Webhooks → Add endpoint** ([dashboard.stripe.com/webhooks](https://dashboard.stripe.com/webhooks))
+2. Endpoint URL: `https://getrippedodt.com/api/stripe-webhook`
+3. Select a single event: **checkout.session.completed**
+4. Save. No signing secret needs to be copied anywhere — the endpoint verifies orders by re-fetching them from Stripe.
+
+Fulfillment workflow for each order email:
+
+1. Place the order with your supplier using the **Ship to** address from the email — the package goes straight to the customer
+2. Make sure the supplier ships blind (no invoices or supplier branding in the package)
+3. When you get a tracking number, email it to the customer (their email is in the order email)
+4. Customer expectation is 3–6 weeks, matching the shipping policy
+
+Backup: in Stripe → your profile → **Notification preferences**, turn on emails for successful payments so you're covered even if the webhook is ever down.
+
 ## Contact form
 
 The contact form and newsletter signup send messages to **mal@getrippedodt.com** through FormSubmit.
