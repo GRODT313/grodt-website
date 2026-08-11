@@ -2,7 +2,11 @@
 "use strict";
 
 const assert = require("assert");
-const { priceItems, FIRST50_LIMIT } = require("../lib/pricing");
+const {
+  priceItems,
+  FIRST50_LIMIT,
+  APPAREL_TAX_CODE,
+} = require("../lib/pricing");
 
 function run() {
   const set = priceItems(
@@ -15,6 +19,12 @@ function run() {
   assert.strictEqual(set.setsApplied, 1);
   assert.strictEqual(set.subtotal, 10000);
   assert.strictEqual(set.savings, 2500);
+
+  // Every line item must carry the apparel tax code for Stripe Tax
+  for (const li of set.lineItems) {
+    assert.strictEqual(li.price_data.tax_behavior, "exclusive");
+    assert.strictEqual(li.price_data.product_data.tax_code, APPAREL_TAX_CODE);
+  }
 
   const cutoff = priceItems(
     [

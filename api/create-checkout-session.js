@@ -3,6 +3,7 @@ const {
   priceItems,
   getFirst50SetsSold,
   getFirst50Limit,
+  SHIPPING_TAX_CODE,
 } = require("../lib/pricing");
 const { applyCors } = require("../lib/cors");
 
@@ -141,9 +142,12 @@ module.exports = async function handler(req, res) {
     const shippingAmount = priced.subtotal >= 7500 ? 0 : 800;
     const origin = getOrigin(req);
 
-    const session = await stripe.checkout.sessions.create({
+    const sessionParams = {
       mode: "payment",
       line_items: priced.lineItems,
+      automatic_tax: {
+        enabled: true,
+      },
       shipping_address_collection: {
         allowed_countries: ["US"],
       },
@@ -155,6 +159,8 @@ module.exports = async function handler(req, res) {
               amount: shippingAmount,
               currency: "usd",
             },
+            tax_behavior: "exclusive",
+            tax_code: SHIPPING_TAX_CODE,
             display_name:
               shippingAmount === 0 ? "Free US shipping" : "US shipping",
             delivery_estimate: {
@@ -173,7 +179,28 @@ module.exports = async function handler(req, res) {
         brand: "GRODT",
         first50_sets: String(priced.setsApplied),
       },
-    });
+    };
+
+    let session;
+    try {
+      session = await stripe.checkout.sessions.create(sessionParams);
+    } catch (taxErr) {
+      // If Stripe Tax is not activated on the account yet, retry without
+      // automatic tax so checkout keeps working. Tax collection starts
+      // once Stripe Tax is set up in the Dashboard.
+      const msg = String((taxErr && taxErr.message) || "");
+      const isTaxSetupError =
+        taxErr &&
+        taxErr.type === "StripeInvalidRequestError" &&
+        /automatic_tax|stripe tax/i.test(msg);
+
+      if (!isTaxSetupError) throw taxErr;
+
+      console.error("Stripe Tax not active, retrying without tax:", msg);
+      const fallbackParams = { ...sessionParams };
+      delete fallbackParams.automatic_tax;
+      session = await stripe.checkout.sessions.create(fallbackParams);
+    }
 
     if (!session.url) {
       res.status(500).json({ error: "Unable to start checkout. Please try again in a moment." });

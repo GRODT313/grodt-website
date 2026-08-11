@@ -46,6 +46,23 @@ npx vercel env pull .env.local
 npx vercel dev
 ```
 
+## Michigan sales tax (Stripe Tax)
+
+Checkout has automatic tax enabled. Stripe calculates and collects Michigan sales tax (6%) on orders shipped to Michigan once Stripe Tax is activated in the Dashboard. Until then, checkout still works but collects no tax.
+
+One-time Dashboard setup (about 5 minutes):
+
+1. Go to [https://dashboard.stripe.com/tax](https://dashboard.stripe.com/tax) and click **Get started** / **Activate Stripe Tax**
+2. Confirm the **origin address** (your Michigan business address)
+3. When asked for a default product tax category, pick **Clothing & Footwear** (the code also sets this per product, so this is just a fallback)
+4. Under **Registrations**, click **Add registration** → United States → **Michigan**, enter the start date from your Michigan Sales Tax license, and save
+
+Notes:
+
+- Adding the registration in Stripe only tells Stripe to start collecting. Your actual license with the State of Michigan is what makes it legal — you have that already.
+- Stripe collects the tax with each payment but does **not** file your Michigan return. File through [Michigan Treasury Online](https://mto.treasury.michigan.gov/) using the Dashboard report at **Tax → Reports** (or add Stripe's paid filing product).
+- Orders shipped to other states collect no tax, which is correct until you register in those states. Stripe's **Tax → Monitoring** page warns you if you're approaching another state's threshold.
+
 ## Contact form
 
 The contact form and newsletter signup send messages to **mal@getrippedodt.com** through FormSubmit.
