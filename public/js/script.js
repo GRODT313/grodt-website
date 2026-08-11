@@ -12,6 +12,14 @@
       .replace(/'/g, "&#39;");
   }
 
+  // Rip intro: drop the overlay from the DOM once the animation is done
+  const intro = document.getElementById("intro");
+  if (intro) {
+    window.setTimeout(function () {
+      if (intro.parentNode) intro.parentNode.removeChild(intro);
+    }, 2300);
+  }
+
   // Mobile menu
   const menuBtn = document.getElementById("menuBtn");
   const navLinks = document.getElementById("navLinks");

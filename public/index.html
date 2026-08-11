@@ -26,6 +26,31 @@
   <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="preload" as="image" href="assets/hero-action.jpg" fetchpriority="high" />
   <link rel="stylesheet" href="css/styles.css" />
+  <script>
+    (function () {
+      // Pre-drop gate: show the countdown page until Aug 14, 2026 10 AM ET.
+      // Visit /?preview=1 once to bypass on this browser.
+      var DROP = Date.parse("2026-08-14T10:00:00-04:00");
+      var preview = false;
+      try {
+        if (/(?:\?|&)preview=1(?:&|$)/.test(window.location.search)) {
+          localStorage.setItem("grodtPreview", "1");
+        }
+        preview = localStorage.getItem("grodtPreview") === "1";
+      } catch (e) {}
+      if (Date.now() < DROP && !preview) {
+        window.location.replace("coming-soon.html");
+        return;
+      }
+      try {
+        if (sessionStorage.getItem("grodtIntro")) {
+          document.documentElement.classList.add("no-intro");
+        } else {
+          sessionStorage.setItem("grodtIntro", "1");
+        }
+      } catch (e) {}
+    })();
+  </script>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -41,6 +66,24 @@
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
+
+  <!-- Rip intro -->
+  <div class="intro" id="intro" aria-hidden="true">
+    <div class="intro-piece intro-piece-top">
+      <div class="intro-sheet intro-sheet-top">
+        <div class="intro-inner">
+          <span class="intro-title">Get Ripped<br />Or Die Trying</span>
+        </div>
+      </div>
+    </div>
+    <div class="intro-piece intro-piece-bottom">
+      <div class="intro-sheet intro-sheet-bottom">
+        <div class="intro-inner">
+          <span class="intro-title">Get Ripped<br />Or Die Trying</span>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- Announcement bar -->
   <div class="ticker" aria-hidden="true">

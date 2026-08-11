@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Dropping August 14 | GET RIPPED OR DIE TRYING</title>
+  <meta name="description" content="Get Ripped Or Die Trying. First drop lands August 14 at 10 AM ET. First 50 sets at $100." />
+  <meta name="robots" content="noindex" />
+  <meta name="theme-color" content="#0c0a0a" />
+  <link rel="icon" type="image/png" href="assets/favicon.png" />
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+    .drop-page {
+      min-height: 100svh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .drop-main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 1.5rem;
+      text-align: center;
+    }
+
+    .drop-inner { max-width: 720px; width: 100%; }
+
+    .drop-logo {
+      height: 96px;
+      width: auto;
+      margin-bottom: 2rem;
+    }
+
+    .drop-title {
+      font-family: var(--font-display);
+      font-size: clamp(2.6rem, 8vw, 5.5rem);
+      line-height: 1.02;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 1rem;
+    }
+
+    .drop-title span { color: var(--red); }
+
+    .drop-sub {
+      color: var(--bone-dim);
+      font-size: 1.05rem;
+      margin-bottom: 2.75rem;
+    }
+
+    .countdown {
+      display: flex;
+      justify-content: center;
+      gap: 0.75rem;
+      margin-bottom: 3rem;
+      flex-wrap: wrap;
+    }
+
+    .count-cell {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      min-width: 110px;
+      padding: 1.25rem 0.75rem 1rem;
+    }
+
+    .count-num {
+      display: block;
+      font-family: var(--font-display);
+      font-size: clamp(2.4rem, 7vw, 4rem);
+      line-height: 1;
+      color: var(--bone);
+    }
+
+    .count-label {
+      display: block;
+      margin-top: 0.5rem;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--bone-dim);
+    }
+
+    .notify-form {
+      display: flex;
+      gap: 0.6rem;
+      max-width: 460px;
+      margin: 0 auto 1rem;
+    }
+
+    .notify-form input {
+      flex: 1;
+      background: var(--charcoal);
+      border: 1px solid var(--line);
+      color: var(--bone);
+      padding: 0.9rem 1rem;
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+    }
+
+    .notify-form input:focus { outline: 2px solid var(--red); }
+
+    .notify-status {
+      min-height: 1.4rem;
+      font-size: 0.9rem;
+      color: var(--bone-dim);
+      margin-bottom: 2rem;
+    }
+
+    .drop-social a {
+      color: var(--bone-dim);
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      text-decoration: none;
+    }
+
+    .drop-social a:hover { color: var(--red); }
+
+    @media (max-width: 540px) {
+      .count-cell { min-width: 72px; padding: 1rem 0.5rem 0.8rem; }
+      .notify-form { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <div class="drop-page">
+    <div class="ticker" aria-hidden="true">
+      <div class="ticker-track">
+        <span>Dropping August 14 at 10 AM ET</span><span class="dot">&#9670;</span>
+        <span>First 50 Customers: $100 Per Set</span><span class="dot">&#9670;</span>
+        <span>Sleeved or Sleeveless T-Shirt</span><span class="dot">&#9670;</span>
+        <span>Limited Run</span><span class="dot">&#9670;</span>
+        <span>Dropping August 14 at 10 AM ET</span><span class="dot">&#9670;</span>
+        <span>First 50 Customers: $100 Per Set</span><span class="dot">&#9670;</span>
+        <span>Sleeved or Sleeveless T-Shirt</span><span class="dot">&#9670;</span>
+        <span>Limited Run</span><span class="dot">&#9670;</span>
+      </div>
+    </div>
+
+    <main class="drop-main">
+      <div class="drop-inner">
+        <img class="drop-logo" src="assets/grodt-logo-nav.png" alt="Get Ripped Or Die Trying logo" width="105" height="96" />
+        <h1 class="drop-title">The First Drop<br /><span>August 14</span></h1>
+        <p class="drop-sub">10 AM ET. First 50 customers get a sleeved or sleeveless tee plus shorts for $100 a set. When they are gone, they are gone.</p>
+
+        <div class="countdown" id="countdown" role="timer" aria-label="Countdown to drop">
+          <div class="count-cell"><span class="count-num" id="cdDays">--</span><span class="count-label">Days</span></div>
+          <div class="count-cell"><span class="count-num" id="cdHours">--</span><span class="count-label">Hours</span></div>
+          <div class="count-cell"><span class="count-num" id="cdMins">--</span><span class="count-label">Minutes</span></div>
+          <div class="count-cell"><span class="count-num" id="cdSecs">--</span><span class="count-label">Seconds</span></div>
+        </div>
+
+        <form class="notify-form" id="notifyForm">
+          <input type="email" name="email" required placeholder="Email address" aria-label="Email address" />
+          <button type="submit" class="btn btn-red">Notify Me</button>
+        </form>
+        <p class="notify-status" id="notifyStatus" role="status" aria-live="polite"></p>
+
+        <p class="drop-social">
+          <a href="https://www.instagram.com/getrippedodt" target="_blank" rel="noopener">Instagram</a>
+        </p>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    (function () {
+      "use strict";
+
+      var DROP = Date.parse("2026-08-14T10:00:00-04:00");
+
+      var days = document.getElementById("cdDays");
+      var hours = document.getElementById("cdHours");
+      var mins = document.getElementById("cdMins");
+      var secs = document.getElementById("cdSecs");
+
+      function pad(n) {
+        return n < 10 ? "0" + n : String(n);
+      }
+
+      function tick() {
+        var left = DROP - Date.now();
+        if (left <= 0) {
+          window.location.replace("/");
+          return;
+        }
+        var s = Math.floor(left / 1000);
+        days.textContent = pad(Math.floor(s / 86400));
+        hours.textContent = pad(Math.floor((s % 86400) / 3600));
+        mins.textContent = pad(Math.floor((s % 3600) / 60));
+        secs.textContent = pad(s % 60);
+        window.setTimeout(tick, 1000 - (left % 1000) + 20);
+      }
+
+      tick();
+
+      var form = document.getElementById("notifyForm");
+      var status = document.getElementById("notifyStatus");
+
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        var email = form.email.value.trim();
+        if (!email) return;
+
+        status.textContent = "Adding you to the list...";
+
+        fetch("https://formsubmit.co/ajax/mal@getrippedodt.com", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({
+            _subject: "Drop list signup",
+            _template: "box",
+            _captcha: "false",
+            email: email,
+            message: "Drop list signup from the countdown page.",
+          }),
+        })
+          .then(function (res) {
+            if (!res.ok) throw new Error("failed");
+            form.reset();
+            status.textContent = "You are on the list. See you August 14.";
+          })
+          .catch(function () {
+            status.textContent = "Something went wrong. Try again in a minute.";
+          });
+      });
+    })();
+  </script>
+</body>
+</html>
