@@ -100,6 +100,7 @@ function formatOrderEmail(session, lineItems) {
 }
 
 async function sendOrderEmail(subject, message) {
+  // FormSubmit rejects bare server-side posts. Origin/Referer must match the live site.
   const response = await fetch(
     "https://formsubmit.co/ajax/" + ORDER_EMAIL,
     {
@@ -107,6 +108,8 @@ async function sendOrderEmail(subject, message) {
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
+        Origin: "https://getrippedodt.com",
+        Referer: "https://getrippedodt.com/",
       },
       body: JSON.stringify({
         _subject: subject,
@@ -116,8 +119,28 @@ async function sendOrderEmail(subject, message) {
       }),
     }
   );
-  if (!response.ok) {
-    throw new Error("Order email failed with status " + response.status);
+
+  const raw = await response.text();
+  let payload = null;
+  try {
+    payload = raw ? JSON.parse(raw) : null;
+  } catch (e) {
+    payload = null;
+  }
+
+  const formSubmitFailed =
+    !response.ok ||
+    (payload &&
+      (payload.success === false ||
+        payload.success === "false" ||
+        payload.error));
+
+  if (formSubmitFailed) {
+    throw new Error(
+      "Order email failed with status " +
+        response.status +
+        (raw ? ": " + raw.slice(0, 300) : "")
+    );
   }
 }
 
