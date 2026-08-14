@@ -138,58 +138,6 @@ h2 { font-size: clamp(2.2rem, 5vw, 3.6rem); }
 
 .btn-small:hover { background: var(--red-deep); }
 
-/* ---------- Ticker ---------- */
-
-.ticker {
-  background: var(--red);
-  color: var(--bone);
-  overflow: hidden;
-  white-space: nowrap;
-  padding: 0.5rem 0;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  font-size: 0.75rem;
-}
-
-.ticker-track {
-  display: inline-flex;
-  align-items: center;
-  gap: 2.5rem;
-  animation: ticker-scroll 28s linear infinite;
-  padding-right: 2.5rem;
-}
-
-.ticker .dot { font-size: 0.55rem; opacity: 0.7; }
-
-.ticker-large {
-  background: var(--charcoal);
-  border-top: 1px solid var(--line);
-  border-bottom: 1px solid var(--line);
-  padding: 1.4rem 0;
-}
-
-.ticker-large .ticker-track {
-  font-family: var(--font-display);
-  font-size: clamp(1.6rem, 4vw, 2.8rem);
-  font-weight: 400;
-  letter-spacing: 2px;
-  color: transparent;
-  -webkit-text-stroke: 1px var(--bone-dim);
-  animation-duration: 36s;
-}
-
-.ticker-large .dot {
-  color: var(--red);
-  -webkit-text-stroke: 0;
-  font-size: 1rem;
-}
-
-@keyframes ticker-scroll {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
-}
-
 /* ---------- Navigation ---------- */
 
 .nav {
@@ -1170,7 +1118,6 @@ h2 { font-size: clamp(2.2rem, 5vw, 3.6rem); }
 @media (prefers-reduced-motion: reduce) {
   .reveal { opacity: 1; transform: none; transition: none; }
   .hero-media img { animation: none; }
-  .ticker-track { animation: none; }
 }
 
 /* ---------- Responsive ---------- */
