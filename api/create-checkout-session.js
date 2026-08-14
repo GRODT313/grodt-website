@@ -173,6 +173,11 @@ module.exports = async function handler(req, res) {
       phone_number_collection: {
         enabled: true,
       },
+      custom_text: {
+        shipping_address: {
+          message: "Orders typically take 3-6 weeks to fulfill.",
+        },
+      },
       success_url: origin + "/success.html?session_id={CHECKOUT_SESSION_ID}",
       cancel_url: origin + "/?checkout=canceled",
       metadata: {
